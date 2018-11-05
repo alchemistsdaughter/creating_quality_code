@@ -51,7 +51,7 @@ def recommend(file, price, cuisines_list):
     # - a dict of {price: list of restaurant names}
     # - a dict of {cusine: list of restaurant names}
     name_to_rating, price_to_names, cuisine_to_names = read_restaurants(file)
-
+    
 
     # Look for price or cuisines first?
     # Price: look up the list of restaurant names for the requested price.
@@ -81,7 +81,6 @@ def build_rating_list(name_to_rating, names_final):
     >>> names = ['Queen St. Cafe', 'Dumplings R Us']
     [[82, 'Queen St. Cafe'], [71, 'Dumplings R Us']]
     """
-    
 
 def filter_by_cuisine(names_matching_price, cuisine_to_names, cuisines_list):
     """ (list of str, dict of {str: list of str}, list of str) -> list of str
@@ -93,10 +92,53 @@ def filter_by_cuisine(names_matching_price, cuisine_to_names, cuisines_list):
      'Thai': ['Queen St. Cafe'],
      'Chinese': ['Dumplings R Us'],
      'Mexican': ['Mexican Grill']}
-    >>> cuisines = ['Chinese', 'Thai']
+    >>> cuisines_list = ['Chinese', 'Thai']
     >>> filter_by_cuisine(names, cuis, cuisines)
     ['Queen St. Cafe', 'Dumplings R Us']
     """
+    name_to_cuisines = invert(cuisine_to_names)
+    
+    cuisines = set(cuisines_list)
+    
+    filtered_names = [name for name in names_matching_price if len(cuisines.intersection(set(name_to_cuisines[name]))) > 0]
+    
+    
+# =============================================================================
+#     for name in names_matching_price:
+#         cur_cuisines = set(name_to_cuisines[name])
+#         if len(cur_cuisines.intersection(cuisines)) > 0:
+#             filtered_names.append(name)
+# =============================================================================
+# =============================================================================
+#         for c in name_to_cuisines[name]:
+#             if c in cuisines_list:
+#                 filtered_names.append(name)
+#                 break
+# =============================================================================
+    
+    return filtered_names
+
+def invert(cuisine_to_names):
+    result = {}
+    
+    for k in cuisine_to_names:
+        for val in cuisine_to_names[k]:
+            if val in result:
+                result[val].append(k)
+            else:
+                result[val] = [k]
+    
+    return result
+
+names = ['Queen St. Cafe', 'Dumplings R Us', 'Deep Fried Everything']
+cuis = {'Canadian': ['Georgie Porgie'],
+'Pub Food': ['Georgie Porgie', 'Deep Fried Everything'],
+'Malaysian': ['Queen St. Cafe'],
+'Thai': ['Queen St. Cafe'],
+'Chinese': ['Dumplings R Us'],
+'Mexican': ['Mexican Grill']}
+cuisines_list = ['Chinese', 'Thai']
+print(filter_by_cuisine(names, cuis, cuisines_list))
 
 def read_restaurants(file):
     """ (file) -> (dict, dict, dict)

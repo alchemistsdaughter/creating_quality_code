@@ -66,7 +66,7 @@ def recommend(file, price, cuisines_list):
     result = build_rating_list(name_to_rating, names_final)
 
     # We're done!  Return that sorted list.
-    return result
+    return print(result)
 
 def build_rating_list(name_to_rating, names_final):
     """ (dict of {str: int}, list of str) -> list of list of [int, str]
@@ -81,6 +81,19 @@ def build_rating_list(name_to_rating, names_final):
     >>> names = ['Queen St. Cafe', 'Dumplings R Us']
     [[82, 'Queen St. Cafe'], [71, 'Dumplings R Us']]
     """
+    print(name_to_rating)
+    rating_to_name  = invert(name_to_rating) #this is not taking the whole rating
+    print(rating_to_name)
+    #print(rating_to_name)
+    rating_list = {}
+    for i in rating_to_name:
+# =============================================================================
+#         for val in i:
+#             if val in names_final:
+#                 rating_list.append(i)
+# =============================================================================
+        return rating_list
+            
 
 def filter_by_cuisine(names_matching_price, cuisine_to_names, cuisines_list):
     """ (list of str, dict of {str: list of str}, list of str) -> list of str
@@ -118,11 +131,12 @@ def filter_by_cuisine(names_matching_price, cuisine_to_names, cuisines_list):
     
     return filtered_names
 
-def invert(cuisine_to_names):
+
+def invert(x):
     result = {}
     
-    for k in cuisine_to_names:
-        for val in cuisine_to_names[k]:
+    for k in x:
+        for val in x[k]:
             if val in result:
                 result[val].append(k)
             else:
@@ -130,15 +144,17 @@ def invert(cuisine_to_names):
     
     return result
 
-names = ['Queen St. Cafe', 'Dumplings R Us', 'Deep Fried Everything']
-cuis = {'Canadian': ['Georgie Porgie'],
-'Pub Food': ['Georgie Porgie', 'Deep Fried Everything'],
-'Malaysian': ['Queen St. Cafe'],
-'Thai': ['Queen St. Cafe'],
-'Chinese': ['Dumplings R Us'],
-'Mexican': ['Mexican Grill']}
-cuisines_list = ['Chinese', 'Thai']
-print(filter_by_cuisine(names, cuis, cuisines_list))
+# =============================================================================
+# names = ['Queen St. Cafe', 'Dumplings R Us', 'Deep Fried Everything']
+# cuis = {'Canadian': ['Georgie Porgie'],
+# 'Pub Food': ['Georgie Porgie', 'Deep Fried Everything'],
+# 'Malaysian': ['Queen St. Cafe'],
+# 'Thai': ['Queen St. Cafe'],
+# 'Chinese': ['Dumplings R Us'],
+# 'Mexican': ['Mexican Grill']}
+# cuisines_list = ['Chinese', 'Thai']
+# print(filter_by_cuisine(names, cuis, cuisines_list))
+# =============================================================================
 
 def read_restaurants(file):
     """ (file) -> (dict, dict, dict)

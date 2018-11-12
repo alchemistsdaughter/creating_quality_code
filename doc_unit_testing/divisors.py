@@ -18,5 +18,8 @@ def get_divisors(num, possible_divisors):
     for item in possible_divisors:
         if item != 0 and num % item == 0:
             divisors.append(item)
-    return divisors    
-        
+    return divisors
+
+if __name__ == '__main__':
+    import doctest
+    print(doctest.testmod())

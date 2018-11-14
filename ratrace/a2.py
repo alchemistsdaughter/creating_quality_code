@@ -116,71 +116,60 @@ class Maze:
     """ A 2D maze. """
 
     # Write your Maze methods here.
-    def __init__(self, maze, rat1, rat2):
-        """(Maze, list of list of str, Rat, Rat) --> NoneType
-        maze to be initialized; rat1 is the first rat in the maze; rat2 is the second rat in the maze
-        >>> maze = Maze([['#', '#', '#', '#', '#', '#', '#'], \ 
-        ['#', '.', '.', '.', '.', '.', '#'], \
-        ['#', '.', '#', '#', '#', '.', '#'], \
-        ['#', '.', '.', '@', '#', '.', '#'], \ 
-        ['#', '@', '#', '.', '@', '.', '#'], \ 
-        ['#', '#', '#', '#', '#', '#', '#']], \
-        Rat("J", 1, 1, 0), Rat("P", 1, 4, 0))
-        >>> maze.maze
-        [['#', '#', '#', '#', '#', '#', '#'],\ 
-        ['#', '.', '.', '.', '.', '.', '#'],\ 
-        ['#', '.', '#', '#', '#', '.', '#'],\ 
-        ['#', '.', '.', '@', '#', '.', '#'],\ 
-        ['#', '@', '#', '.', '@', '.', '#'],\ 
-        ['#', '#', '#', '#', '#', '#', '#']]
-        >>> maze.rat2.symbol
-        'P'
-        >>> maze.rat1.column
-        1
-        >>> maze.num_sprouts_left
-        3
+    def __init__(self, maze_list, rat1, rat2):
+        """(Maze, list, Rat, Rat) -> NoneType
+        Initialize the mze; contents of the maze; first rat in the maze; second rat in the maze
+        
+        maze = Maze([['#', '#', '#', '#', '#', '#', '#'],
+        ['#', '.', '.', '.', '.', '.', '#'],
+        ['#', '.', '#', '#', '#', '.', '#'],
+        ['#', '.', '.', '@', '#', '.', '#'],
+        ['#', '@', '#', '.', '@', '.', '#'],
+        ['#', '#', '#', '#', '#', '#', '#']],
+        Rat('J', 1, 1), Rat('P', 1, 4))
         """
         
-        self.maze = maze
+        self.maze_list = maze_list
         self.rat1 = rat1
         self.rat2 = rat2
         
+        
         count = 0
-        for i in range(0, len(maze)):
-            for n in range(0, len(maze[0])):
-                if self.maze[i][n] == SPROUT:
+        for line in maze_list:
+            for n in line:
+                if n == SPROUT:
                     count += 1
         
         self.num_sprouts_left = count
-# =============================================================================
-#         
-#     def is_wall (self, row, col):
-#         """ (Maze, int, int) -> bool
-#         
-#         Maze is the maze; row is the row; col is the col. Returns true iff there is a wall at the given row and column of the maze
-#         >>> maze = Maze([['#', '#', '#', '#', '#', '#', '#'],
-#         ['#', '.', '.', '.', '.', '.', '#'],
-#         ['#', '.', '#', '#', '#', '.', '#'],
-#         ['#', '.', '.', '@', '#', '.', '#'],
-#         ['#', '@', '#', '.', '@', '.', '#'],
-#         ['#', '#', '#', '#', '#', '#', '#']],
-#         Rat("J", 1, 1, 0), 
-#         Rat("P", 1, 4, 0))
-#         >>> maze.is_wall (0,0)
-#         True
-#         >>> maze.is_wall(1, 2)
-#         False
-#         >>> maze.is_wall(3, 3)
-#         False
-#         """
-#         
-#         if self.maze[row][col] == WALL:
-#             return True
-#         else:
-#             return False
-#         
-# =============================================================================
         
+    def is_wall (self, row, col):      
+        if self.maze_list[row][col] == WALL:
+            return True
+        else:
+            return False
+    
+    def get_character(self, row, col):
+        ch = self.maze_list[row][col]    
+        if self.maze_list[row][col] == (row, col):
+            ch = self.rat1.symbol
+        if self.maze_list[row][col] == (row, col):
+            ch = self.rate2.symbol
+        return ch
+    
+    def move(self, Rat, verticalchange, horizontalchange):
+        """ (Maze, Rat, int, int) -> NoneType
+        Moves the rat in a given direction, unless there is a wall in the way. Also, check for Brussels sprouts at this location.
+        If present have the rat eat the Brussels sprout; make that location a HALL; decrease the value that num_sprouts_left refers to by one;
+        return True iff there wasn't a wall in the way
+        """
+        
+        if self.maze_list[row][col] != WALL:
+            return True
+        elif self.maze_list
+        
+    def __str__(self):
+        
+
 
 if __name__ == '__main__':
 # =============================================================================

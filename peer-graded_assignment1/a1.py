@@ -6,6 +6,7 @@ Created on Fri Nov  9 15:03:48 2018
 """
 import math
 
+
 def num_buses(n):
     """ (int) -> int
 
@@ -25,36 +26,35 @@ def num_buses(n):
     return num
 
 
-# =============================================================================
-# def stock_price_summary(price_changes):
-#     """ (list of number) -> (number, number) tuple
-# 
-#     price_changes contains a list of stock price changes. Return a 2-item
-#     tuple where the first item is the sum of the gains in price_changes and
-#     the second is the sum of the losses in price_changes.
-# 
-#     >>> stock_price_summary([0.01, 0.03, -0.02, -0.14, 0, 0, 0.10, -0.01])
-#     (0.14, -0.17)
-#     >>> stock_price_summary([])
-#     (0.0, 0.0)
-#     >>> stock_price_summary([-2, -0.01, -.9])
-#     (0.0, -2.91)
-#     >>> stock_price_summary([2, 0.01, .9, 0])
-#     (2.91, 0.0)
-#     """
-#     stock_changes = []
-#     neg_sum = 0.0
-#     pos_sum = 0.0
-#     for num in price_changes:
-#         if num < 0:
-#             neg_sum += num
-#         if num >= 0:
-#             pos_sum += num
-#     stock_changes.append(pos_sum)
-#     stock_changes.append(neg_sum)
-#     return tuple(stock_changes)
-# =============================================================================
+def stock_price_summary(price_changes):
+    """ (list of number) -> (number, number) tuple
 
+    price_changes contains a list of stock price changes. Return a 2-item
+    tuple where the first item is the sum of the gains in price_changes and
+    the second is the sum of the losses in price_changes.
+
+    >>> stock_price_summary([0.01, 0.03, -0.02, -0.14, 0, 0, 0.10, -0.01])
+    (0.14, -0.17)
+    >>> stock_price_summary([])
+    (0.0, 0.0)
+    >>> stock_price_summary([-2, -0.01, -.9])
+    (0.0, -2.91)
+    >>> stock_price_summary([2, 0.01, .9, 0])
+    (2.91, 0.0)
+    """
+    stock_changes = []
+    neg_sum = 0.0
+    pos_sum = 0.0
+    for num in price_changes:
+        if num < 0:
+            neg_sum += num
+        if num >= 0:
+            pos_sum += num
+    stock_changes.append(pos_sum)
+    stock_changes.append(neg_sum)
+    return tuple(stock_changes)
+
+print(stock_price_summary([-2, -0.01, -.9]))
 
 def swap_k(L, k):
     """ (list, int) -> NoneType
@@ -65,19 +65,21 @@ def swap_k(L, k):
 
     >>> nums = [1, 2, 3, 4, 5, 6]
     >>> swap_k(nums, 2)
-    >>> nums
     [5, 6, 3, 4, 1, 2]
-    >>> lets = ['a', 'b', 'c', 'd', 'e', 'f']
-    >>> swap_k(lets, 2)]
-    >>> lets
-    ['e', 'f', 'c', 'd', 'a', 'b']
     """
-    new_list = L[k:] + L[0:k]
-    print(new_list)
-lets = ['a', 'b', 'c', 'd', 'e', 'f']
-swap_k(lets, 2)
+    if len(L) == 0:
+        return L
+    if k == 0:
+        return L
+    else:
+        L[:k], L[-k:] = L[-k:], L[:k]
+    return L
+swap_k([1, 2, 3, 4, 5, 6, 7], 0)
 
-if __name__ == '__main__':
-    import doctest
-    doctest.testmod()
+
+# =============================================================================
+# if __name__ == '__main__':
+#     import doctest
+#     doctest.testmod()
+# =============================================================================
 

@@ -120,20 +120,19 @@ class Maze:
         """(Maze, list, Rat, Rat) -> NoneType
         Initialize the mze; contents of the maze; first rat in the maze; second rat in the maze
         
-        maze = Maze([['#', '#', '#', '#', '#', '#', '#'],
-        ['#', '.', '.', '.', '.', '.', '#'],
-        ['#', '.', '#', '#', '#', '.', '#'],
-        ['#', '.', '.', '@', '#', '.', '#'],
-        ['#', '@', '#', '.', '@', '.', '#'],
-        ['#', '#', '#', '#', '#', '#', '#']],
-        Rat('J', 1, 1), Rat('P', 1, 4))
+        >>> maze = Maze([['#', '#', '#', '#', '#', '#', '#'],
+        ... ['#', '.', '.', '.', '.', '.', '#'],
+        ... ['#', '.', '#', '#', '#', '.', '#'],
+        ... ['#', '.', '.', '@', '#', '.', '#'],
+        ... ['#', '@', '#', '.', '@', '.', '#'],
+        ... ['#', '#', '#', '#', '#', '#', '#']],
+        ... Rat('J', 1, 1), Rat('P', 1, 4))
         """
         
         self.maze_list = maze_list
         self.rat1 = rat1
         self.rat2 = rat2
-        
-        
+               
         count = 0
         for line in maze_list:
             for n in line:
@@ -149,27 +148,70 @@ class Maze:
             return False
     
     def get_character(self, row, col):
-        ch = self.maze_list[row][col]    
-        if self.maze_list[row][col] == (row, col):
-            ch = self.rat1.symbol
-        if self.maze_list[row][col] == (row, col):
-            ch = self.rate2.symbol
-        return ch
+        """ (Maze) -> ch """
+        if self.rat1.row == row and self.rat1.col == col:
+            return self.rat1.symbol
+        if self.rat2.row == row and self.rat2.col == col:
+            return self.rat2.symbol
+        return self.maze_list[row][col]
     
-    def move(self, Rat, verticalchange, horizontalchange):
+    def move(self, rat, verticalchange, horizontalchange):
         """ (Maze, Rat, int, int) -> NoneType
         Moves the rat in a given direction, unless there is a wall in the way. Also, check for Brussels sprouts at this location.
         If present have the rat eat the Brussels sprout; make that location a HALL; decrease the value that num_sprouts_left refers to by one;
         return True iff there wasn't a wall in the way
+        
+        >>> rat1 = Rat('J', 1, 1)
+        >>> rat2 = Rat('P', 1, 4)
+        >>> maze = Maze([['#', '#', '#', '#', '#', '#', '#'],
+        ... ['#', '.', '.', '.', '.', '.', '#'],
+        ... ['#', '.', '#', '#', '#', '.', '#'],
+        ... ['#', '.', '.', '@', '#', '.', '#'],
+        ... ['#', '@', '#', '.', '@', '.', '#'],
+        ... ['#', '#', '#', '#', '#', '#', '#']],
+        ... rat1, rat2)
+        >>> maze.move(rat1, DOWN, NO_CHANGE)
+        True
+        >>> maze.get_character(2, 1)
+        'J'
+        >>> maze.get_character(1, 1)
+        '.'
         """
+               
+        if verticalchange != NO_CHANGE:
+            rat.set_location(rat.row + verticalchange, rat.col) #moving the rate
+            if self.maze_list[rat.row + verticalchange][rat.col] == SPROUT:
+                rat.eatsprout()
+                self.num_sprouts_left -=1
+                self.maze_list[rat.row + verticalchange][rat.col] = HALL
+            self.maze_list[rat.row][rat.col] = HALL #changing the rat's previous location to a hall
+            
+        if horizontalchange != NO_CHANGE:
+            rat.set_location(rat.row, rat.col + horizontalchange) #moving the rate
+            if self.maze_list[rat.row][rat.col + horizontalchange] == SPROUT:
+                rat.eatsprout()
+                num_sprouts_left -=1
+                self.maze_list[rat.row][rat.col + horizontalchange] = HALL
+            self.maze_list[rat.row][rat.col] = HALL #changing the rat's previous location to a hall            
         
-        if self.maze_list[row][col] != WALL:
-            return True
-        elif self.maze_list
+        return True
         
-    def __str__(self):
-        
-
+# =============================================================================
+#     def __str__(self):
+#         """ (Maze) -> str"""
+#         
+#         Returns a string representation of the maze.
+#         maze = Maze(
+#         #######
+#         #J..P.#
+#         #.###.#
+#         #..@#.#
+#         #@#.@.#
+#         #######
+#         , J at (1, 1) ate 0 sprouts
+#         , P at (1, 4) ate 0 sprouts)
+# 
+# =============================================================================
 
 if __name__ == '__main__':
 # =============================================================================

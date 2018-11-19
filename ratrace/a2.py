@@ -111,12 +111,12 @@ class Rat:
         
         return '{0} at ({1}, {2}) ate {3} sprouts'.format(
                 self.symbol, self.row, self.col, self.num_sprouts_eaten)
-
+        
 class Maze:
     """ A 2D maze. """
 
     # Write your Maze methods here.
-    def __init__(self, maze_list, rat1, rat2):
+    def __init__(self, maze, rat1, rat2):
         """(Maze, list, Rat, Rat) -> NoneType
         Initialize the mze; contents of the maze; first rat in the maze; second rat in the maze
         
@@ -129,12 +129,12 @@ class Maze:
         ... Rat('J', 1, 1), Rat('P', 1, 4))
         """
         
-        self.maze_list = maze_list
+        self.maze = maze
         self.rat1 = rat1
         self.rat2 = rat2
                
         count = 0
-        for line in maze_list:
+        for line in maze:
             for n in line:
                 if n == SPROUT:
                     count += 1
@@ -142,18 +142,35 @@ class Maze:
         self.num_sprouts_left = count
         
     def is_wall (self, row, col):      
-        if self.maze_list[row][col] == WALL:
+        if self.maze[row][col] == WALL:
             return True
         else:
             return False
     
     def get_character(self, row, col):
-        """ (Maze) -> ch """
+        """ (Maze, int, int) -> ch 
+        Takes a row and col and returns the character of the maze that exists at that location
+        >>> rat1 = Rat('J', 1, 1)
+        >>> rat2 = Rat('P', 1, 4)
+        >>> maze = Maze([['#', '#', '#', '#', '#', '#', '#'],
+        ... ['#', '.', '.', '.', '.', '.', '#'],
+        ... ['#', '.', '#', '#', '#', '.', '#'],
+        ... ['#', '.', '.', '@', '#', '.', '#'],
+        ... ['#', '@', '#', '.', '@', '.', '#'],
+        ... ['#', '#', '#', '#', '#', '#', '#']],
+        ... rat1, rat2)
+        >>> maze.get_character(1, 1)
+        'J'
+        >>> maze.get_character(0, 1)
+        '#'
+        >>> maze.get_character(1, 2)
+        '.'
+        """
         if self.rat1.row == row and self.rat1.col == col:
             return self.rat1.symbol
-        if self.rat2.row == row and self.rat2.col == col:
+        if self.rat2.row == row and self.rat2.col == col: #if row and col of rat match, return rat symbol
             return self.rat2.symbol
-        return self.maze_list[row][col]
+        return self.maze[row][col]
     
     def move(self, rat, verticalchange, horizontalchange):
         """ (Maze, Rat, int, int) -> NoneType
@@ -176,48 +193,68 @@ class Maze:
         'J'
         >>> maze.get_character(1, 1)
         '.'
+        >>> maze.get_character(0, 1)
+        '#'
         """
-               
+                       
         if verticalchange != NO_CHANGE:
+            if self.maze[rat.row + verticalchange][rat.col] == WALL: #if the rat tries to move into a WALL, return False
+                return False
             rat.set_location(rat.row + verticalchange, rat.col) #moving the rate
-            if self.maze_list[rat.row + verticalchange][rat.col] == SPROUT:
+            if self.maze[rat.row + verticalchange][rat.col] == SPROUT:
                 rat.eatsprout()
                 self.num_sprouts_left -=1
-                self.maze_list[rat.row + verticalchange][rat.col] = HALL
-            self.maze_list[rat.row][rat.col] = HALL #changing the rat's previous location to a hall
+                self.maze[rat.row + verticalchange][rat.col] = HALL
+            self.maze[rat.row][rat.col] = HALL #changing the rat's previous location to a hall
             
         if horizontalchange != NO_CHANGE:
+            if self.maze[rat.row + horizontalchange][rat.col] == WALL:
+                return False
             rat.set_location(rat.row, rat.col + horizontalchange) #moving the rate
-            if self.maze_list[rat.row][rat.col + horizontalchange] == SPROUT:
+            if self.maze[rat.row][rat.col + horizontalchange] == SPROUT:
                 rat.eatsprout()
-                num_sprouts_left -=1
-                self.maze_list[rat.row][rat.col + horizontalchange] = HALL
-            self.maze_list[rat.row][rat.col] = HALL #changing the rat's previous location to a hall            
+                self.num_sprouts_left -= 1
+                self.maze[rat.row][rat.col + horizontalchange] = HALL
+            self.maze[rat.row][rat.col] = HALL #changing the rat's previous location to a hall            
         
         return True
+    
+    
+    def __str__(self):
+        """ (Maze) -> str
         
-# =============================================================================
-#     def __str__(self):
-#         """ (Maze) -> str"""
-#         
-#         Returns a string representation of the maze.
-#         maze = Maze(
-#         #######
-#         #J..P.#
-#         #.###.#
-#         #..@#.#
-#         #@#.@.#
-#         #######
-#         , J at (1, 1) ate 0 sprouts
-#         , P at (1, 4) ate 0 sprouts)
-# 
-# =============================================================================
+        Returns a string representation of the maze as follows:
+            
+        >>> rat1 = Rat('J', 1, 1)
+        >>> rat2 = Rat('P', 1, 4)
+        >>> maze = Maze([['#', '#', '#', '#', '#', '#', '#'],
+        ... ['#', '.', '.', '.', '.', '.', '#'],
+        ... ['#', '.', '#', '#', '#', '.', '#'],
+        ... ['#', '.', '.', '@', '#', '.', '#'],
+        ... ['#', '@', '#', '.', '@', '.', '#'],
+        ... ['#', '#', '#', '#', '#', '#', '#']],
+        ... rat1, rat2)
+        >>> print (maze)
+        #######
+        #J..P.#
+        #.###.#
+        #..@#.#
+        #@#.@.#
+        #######
+        J at (1, 1) ate 0 sprouts
+        P at (1, 4) ate 0 sprouts
+        """
+        mazestring = ""
+        
+        for mazerow in range(len(self.maze)):
+            for mazecol in range(len(self.maze[mazerow])):
+                mazestring += self.get_character(mazerow, mazecol) #pulling the maze symbol by iterating through the maze using get_character
+            mazestring += "\n"
+        
+        
+        return '{0}{1}\n{2}'.format(
+                mazestring, self.rat1, self.rat2)
 
-if __name__ == '__main__':
-# =============================================================================
-#     paul = Rat("P", 1, 4, 0)
-#     jen = Rat("J", 1, 1, 0)
-# =============================================================================
-    
+
+if __name__ == '__main__':  
     doctest.testmod()
-    
